@@ -59,3 +59,22 @@ metadata:
 data:
   MONGO: "true" # keep true in double quotes
   MONGO_URL: "mongodb://mongodb:27017/catalogue" # protocol//service-name:service-port/schema
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: catalogue
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: catalogue
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 75
